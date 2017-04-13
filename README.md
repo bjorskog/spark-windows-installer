@@ -1,4 +1,4 @@
-![https://gitter.im/spark-windows-installer/Lobby](https://img.shields.io/gitter/room/TechnologyAdvice/Stardust.svg?style=flat-square)
+[![Gitter](https://img.shields.io/gitter/room/TechnologyAdvice/Stardust.svg?style=flat-square)](https://gitter.im/spark-windows-installer/Lobby)
 
 # Installer Script for Spark on Windows
 
