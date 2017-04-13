@@ -139,5 +139,6 @@ if (-not $hasEnvPath) {
 Write-Host "Creating hive scratch dirs and setting permissions..."
 mkdir.exe -p /tmp/hive
 winutils chmod 777 /tmp/hive
+winutils chmod 777 $env:TEMP
 
 Write-Host "Done."
