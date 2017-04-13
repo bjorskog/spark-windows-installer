@@ -18,6 +18,16 @@ It will install the following (if the command has not been found, don't worry, i
 * **Spark 2.1.0** with Hadoop 2.7: binaries downloaded directly from the official website
 * **winutils.exe**: Required by spark to work (it's added in the `SPARK_HOME/bin` dir)
 
+## How do I even ?
+
+Actually, it's easy as pie 🍪. Turn on a powershell console with Administrator privileges and navigate to your script file, then:
+```
+PS> ./installer.ps1
+```
+
+At the moment there is one command argument for this script:
+* `-Where "C:\"` the path were spark will be installed. In this example you will find spark in the dir `C:\spark`
+
 ## Hive
 * Hive needs a temporary scratch dir (defualt is `/tmp/hive`) with write permissions
 * Because of how the file system works on Windows this path is relative the current root you run the command (so if you're on C: drive, the folder will be available at `C:\tmp\hive`)
