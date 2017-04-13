@@ -119,7 +119,7 @@ Remove-Item "$($tempArchive).tar"
 Move-Item "$($where)spark-2.1.0-bin-hadoop2.7" "$($where)spark"
 
 Write-Host "Downloading winutils required for spark on windows..."
-Invoke-WebRequest http://public-repo-1.hortonworks.com/hdp-win-alpha/winutils.exe -OutFile "$($Where)\spark\bin\winutils.exe"
+Invoke-WebRequest https://github.com/steveloughran/winutils/raw/master/hadoop-2.7.1/bin/winutils.exe -OutFile "$($Where)\spark\bin\winutils.exe"
 
 Write-Host "Setting environment variables..."
 [System.Environment]::SetEnvironmentVariable('HADOOP_HOME', "$($Where)spark", 'User')
@@ -137,6 +137,7 @@ if (-not $hasEnvPath) {
 }
 
 Write-Host "Creating hive scratch dirs and setting permissions..."
-mkdir.exe -p -m 777 /tmp/hive
+mkdir.exe -p /tmp/hive
+winutils chmod 777 /tmp/hive
 
 Write-Host "Done."
