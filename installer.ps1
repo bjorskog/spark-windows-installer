@@ -5,7 +5,23 @@ param(
 )
 
 $WhatToInstall = @()
+$InstallScala = $false
 $ErrorActionPreference = "Stop"
+
+function InstallScala() {
+	Write-Host 'Downloading Scala 2.12.1...'
+	Invoke-WebRequest https://downloads.lightbend.com/scala/2.12.1/scala-2.12.1.msi -OutFile "$env:TEMP/scala-2.12.1.msi"
+	Write-Host 'Installing Scala 2.12.1...'
+	Start-Process msiexec.exe -Wait -ArgumentList "/I `"$env:TEMP\scala-2.12.1.msi`" /quiet"
+
+	refreshenv
+
+	if (-Not (Get-Command scala -ErrorAction SilentlyContinue)) {
+		throw [System.ApplicationException] 'We were unable to install Scala :('
+	}
+
+	Write-Host 'Successfully installed Scala 2.12.1.'
+}
 
 if (-Not (Get-Command choco -ErrorAction SilentlyContinue)) {
 	Write-Host "Installing chocolatey package manager" -ForegroundColor Green
@@ -24,7 +40,9 @@ if (-Not (Get-Command python -ErrorAction SilentlyContinue)) {
 		$answer = (Read-Host "Do you want [us] to automatically install python 2.7.13?").ToLower();
 	}
 
-	$WhatToInstall += 'python2'
+	if ($answer -eq 'y') {
+		$WhatToInstall += 'python2'
+	}
 } else {
 	Write-Host "Python 2 already installed" -ForegroundColor Green
 }
@@ -34,10 +52,12 @@ if (-Not (Get-Command java -ErrorAction SilentlyContinue)) {
 	$answer = $null;
 
 	while(@('y', 'n') -notcontains $answer) {
-		$answer = (Read-Host "Do you want [us] to automatically install Java 1.8.0?").ToLower();
+		$answer = (Read-Host "Do you want [us] to automatically install JRE/JDK 1.8.0?").ToLower();
 	}
 
-	$WhatToInstall += @('jdk8', 'jre8')
+	if ($answer -eq 'y') {
+		$WhatToInstall += @('jdk8', 'jre8')
+	}
 } else {
 	Write-Host "Java already installed" -ForegroundColor Green
 }
@@ -47,10 +67,23 @@ if (-Not (Get-Command scala -ErrorAction SilentlyContinue)) {
 	$answer = $null;
 
 	while(@('y', 'n') -notcontains $answer) {
-		$answer = (Read-Host "Do you want [us] to automatically install Scala 2.11.4?").ToLower();
+		$answer = (Read-Host "Do you want [us] to automatically install Scala 2.12.1?").ToLower();
 	}
 
-	$WhatToInstall += 'scala.install'
+	if ($answer -eq 'y') {
+		$InstallScala = $true
+	}	
+} elseif ([bool]((scala -version) -notmatch '2.12')) {
+	Write-Host "We want to install Scala version 2.12.1 but you seem to have another version" -ForegroundColor Yellow
+	$answer = $null;
+
+	while(@('y', 'n') -notcontains $answer) {
+		$answer = (Read-Host "Do you want [us] to automatically install Scala 2.12.1?").ToLower();
+	}
+
+	if ($answer -eq 'y') {
+		$InstallScala = $true
+	}
 }
 
 if (-not ([bool]($(choco search GnuWin --local-only -r)))) {
@@ -63,12 +96,16 @@ if (-not ([bool]($(choco search GnuWin --local-only -r)))) {
 }
 
 if ($WhatToInstall.Length -ne 0) {
-	choco install ($WhatToInstall -join ' ')
+	choco install @WhatToInstall
 
 	refreshenv
 }
 
-$tempArchive = "C:\Windows\Temp\spark-2.1.0-bin-hadoop2.7"
+if ($InstallScala) {
+	InstallScala
+}
+
+$tempArchive = "$env:TEMP\spark-2.1.0-bin-hadoop2.7"
 
 Write-Host "Downloading Spark 2.1.0..."
 Invoke-WebRequest -Uri http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz -OutFile "$($tempArchive).tgz"
