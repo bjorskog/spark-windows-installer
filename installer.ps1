@@ -50,7 +50,7 @@ if (-Not (Get-Command scala -ErrorAction SilentlyContinue)) {
 		$answer = (Read-Host "Do you want [us] to automatically install Scala 2.11.4?").ToLower();
 	}
 
-	$WhatToInstall += @('scala.install')
+	$WhatToInstall += 'scala.install'
 }
 
 if (-not ([bool]($(choco search GnuWin --local-only -r)))) {
