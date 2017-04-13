@@ -13,7 +13,7 @@ It will install the following (if the command has not been found, don't worry, i
 * **chocolatey**: A package manager for windows, used to install dependencies
 * **python2**: Installed through chocolatey
 * **Java 1.8.0 (jdk8, jre8)**: Installed through chocolatey
-* **Scala 2.12.1**: Installed through chocolatey
+* **Scala 2.12.1**: Installed from the official installer package
 * **GnuWin**: GNU Coreutils for windows (used for the tar & gzip commands); installed through chocolatey
 * **Spark 2.1.0** with Hadoop 2.7: binaries downloaded directly from the official website
 * **winutils.exe**: Required by spark to work (it's added in the `SPARK_HOME/bin` dir)
