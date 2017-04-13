@@ -88,12 +88,15 @@ Write-Host "Setting environment variables..."
 [System.Environment]::SetEnvironmentVariable('HADOOP_HOME', "$($Where)spark", 'User')
 [System.Environment]::SetEnvironmentVariable('SPARK_HOME', "$($Where)spark", 'User')
 [System.Environment]::SetEnvironmentVariable('SPARK_JARS', "$($Where)spark\jars", 'User')
-[System.Environment]::SetEnvironmentVariable('SCALA_HOME', "C:\Program Files (x86)\scala\bin", 'User')
+
+if (-Not [bool]$env:SCALA_HOME) {
+	[System.Environment]::SetEnvironmentVariable('SCALA_HOME', "C:\Program Files (x86)\scala\bin", 'User')
+}
 
 $hasEnvPath = ([System.Environment]::GetEnvironmentVariable('PATH') -split ';') -contains "$($Where)spark\bin"
 
 if (-not $hasEnvPath) {
-	[System.Environment]::SetEnvironmentVariable('PATH', "$([System.Environment]::GetEnvironmentVariable('PATH'));$($Where)spark\bin")	
+	[System.Environment]::SetEnvironmentVariable('PATH', "$([System.Environment]::GetEnvironmentVariable('PATH', 'User'));$($Where)spark\bin")	
 }
 
 Write-Host "Creating hive scratch dirs and setting permissions..."
