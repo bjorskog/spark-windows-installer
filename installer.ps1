@@ -21,7 +21,7 @@ if (-Not (Get-Command python -ErrorAction SilentlyContinue)) {
 	$answer = $null;
 
 	while(@('y', 'n') -notcontains $answer) {
-		$answer = (Read-Host "Do you want [us] to automatically install python 2?").ToLower();
+		$answer = (Read-Host "Do you want [us] to automatically install python 2.7.13?").ToLower();
 	}
 
 	$WhatToInstall += 'python2'
@@ -40,6 +40,17 @@ if (-Not (Get-Command java -ErrorAction SilentlyContinue)) {
 	$WhatToInstall += @('jdk8', 'jre8')
 } else {
 	Write-Host "Java already installed" -ForegroundColor Green
+}
+
+if (-Not (Get-Command scala -ErrorAction SilentlyContinue)) {
+	Write-Host "Scala not detected in PATH" -ForegroundColor Yellow
+	$answer = $null;
+
+	while(@('y', 'n') -notcontains $answer) {
+		$answer = (Read-Host "Do you want [us] to automatically install Scala 2.11.4?").ToLower();
+	}
+
+	$WhatToInstall += @('scala.install')
 }
 
 if (-not ([bool]($(choco search GnuWin --local-only -r)))) {
@@ -76,11 +87,16 @@ Invoke-WebRequest http://public-repo-1.hortonworks.com/hdp-win-alpha/winutils.ex
 Write-Host "Setting environment variables..."
 [System.Environment]::SetEnvironmentVariable('HADOOP_HOME', "$($Where)spark", 'User')
 [System.Environment]::SetEnvironmentVariable('SPARK_HOME', "$($Where)spark", 'User')
+[System.Environment]::SetEnvironmentVariable('SPARK_JARS', "$($Where)spark\jars", 'User')
+[System.Environment]::SetEnvironmentVariable('SCALA_HOME', "C:\Program Files (x86)\scala\bin", 'User')
 
 $hasEnvPath = ([System.Environment]::GetEnvironmentVariable('PATH') -split ';') -contains "$($Where)spark\bin"
 
 if (-not $hasEnvPath) {
 	[System.Environment]::SetEnvironmentVariable('PATH', "$([System.Environment]::GetEnvironmentVariable('PATH'));$($Where)spark\bin")	
 }
+
+Write-Host "Creating hive scratch dirs and setting permissions..."
+mkdir.exe -p -m 777 /tmp/hive
 
 Write-Host "Done."
