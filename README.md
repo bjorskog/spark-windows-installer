@@ -1,6 +1,13 @@
 # Installer Script for Spark on Windows
 
-This is a powershell script used to install Spark and everything else (so it will actually work).
+## Introduction
+First time I wanted to install and learn spark I just said to myself I'll use windows locally, and skip using an Ubuntu VM for this. Turns out installing Spark on windows ain't that easy, hence why I made this script.
+
+This is a powershell script used to install Spark and everything else (so it will actually work). This script also sets the necessary environment variables on the User-level.
+
+This was made for development purposes, so I don't recommend using it for production
+
+## What does it do ?
 
 It will install the following (if the command has not been found, don't worry, it will ask before continueing): 
 * **chocolatey**: A package manager for windows, used to install dependencies
@@ -10,8 +17,6 @@ It will install the following (if the command has not been found, don't worry, i
 * **GnuWin**: GNU Coreutils for windows (used for the tar & gzip commands); installed through chocolatey
 * **Spark 2.1.0** with Hadoop 2.7: binaries downloaded directly from the official website
 * **winutils.exe**: Required by spark to work (it's added in the `SPARK_HOME/bin` dir)
-
-This script also sets the necessary environment variables on the User-level.
 
 ## Hive
 * Hive needs a temporary scratch dir (defualt is `/tmp/hive`) with write permissions
