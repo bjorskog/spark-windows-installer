@@ -13,7 +13,7 @@ It will install the following (if the command has not been found, don't worry, i
 * **chocolatey**: A package manager for windows, used to install dependencies
 * **python2**: Installed through chocolatey
 * **Java 1.8.0 (jdk8, jre8)**: Installed through chocolatey
-* **Scala 2.11**: Installed through chocolatey
+* **Scala 2.12.1**: Installed through chocolatey
 * **GnuWin**: GNU Coreutils for windows (used for the tar & gzip commands); installed through chocolatey
 * **Spark 2.1.0** with Hadoop 2.7: binaries downloaded directly from the official website
 * **winutils.exe**: Required by spark to work (it's added in the `SPARK_HOME/bin` dir)
@@ -31,6 +31,9 @@ At the moment there is one command argument for this script:
 ## Hive
 * Hive needs a temporary scratch dir (defualt is `/tmp/hive`) with write permissions
 * Because of how the file system works on Windows this path is relative the current root you run the command (so if you're on C: drive, the folder will be available at `C:\tmp\hive`)
+
+## Current problems
+* Even though I'm using chmod to change the dir permissions spark may still fail to boot up complaining with the error `The root scratch dir: /tmp/hive on HDFS should be writable. Current permissions are: rw-rw-rw-`. Your Spark installation will not work until this is solved
 
 ## Reporting errors & contributing
 * If you happen to run into any issue at all, don't hesitate to file a issue, here on Github 😁
