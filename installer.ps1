@@ -5,12 +5,14 @@ param(
 )
 
 $WhatToInstall = @()
+$TemptFiles = @()
 $InstallScala = $false
 $ErrorActionPreference = "Stop"
 
 function InstallScala() {
 	Write-Host 'Downloading Scala 2.12.1...'
 	Invoke-WebRequest https://downloads.lightbend.com/scala/2.12.1/scala-2.12.1.msi -OutFile "$env:TEMP/scala-2.12.1.msi"
+	$TemptFiles += "$env:TEMP/scala-2.12.1.msi"
 	Write-Host 'Installing Scala 2.12.1...'
 	Start-Process msiexec.exe -Wait -ArgumentList "/I `"$env:TEMP\scala-2.12.1.msi`" /quiet"
 
@@ -109,13 +111,12 @@ $tempArchive = "$env:TEMP\spark-2.1.0-bin-hadoop2.7"
 
 Write-Host "Downloading Spark 2.1.0..."
 Invoke-WebRequest -Uri http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz -OutFile "$($tempArchive).tgz"
+$TemptFiles += "$($tempArchive).tar"
 
 Write-Host "Decompressing archive..."
 gzip -d "$($tempArchive).tgz"
 Write-Host "Extracting archive to $($Where)"
 bsdtar xvf "$($tempArchive).tar" -C $Where
-Write-Host "Removing temp archive file"
-Remove-Item "$($tempArchive).tar"
 Move-Item "$($where)spark-2.1.0-bin-hadoop2.7" "$($where)spark"
 
 Write-Host "Downloading winutils required for spark on windows..."
@@ -140,5 +141,6 @@ Write-Host "Creating hive scratch dirs and setting permissions..."
 mkdir.exe -p /tmp/hive
 winutils chmod 777 /tmp/hive
 winutils chmod 777 $env:TEMP
+Remove-Item @TemptFiles
 
 Write-Host "Done."
