@@ -11,8 +11,8 @@ $ErrorActionPreference = "Stop"
 
 function InstallScala() {
 	Write-Host 'Downloading Scala 2.12.1...'
-	Invoke-WebRequest https://downloads.lightbend.com/scala/2.12.1/scala-2.12.1.msi -OutFile "$env:TEMP/scala-2.12.1.msi"
-	$TemptFiles += "$env:TEMP/scala-2.12.1.msi"
+	Invoke-WebRequest https://downloads.lightbend.com/scala/2.12.1/scala-2.12.1.msi -OutFile "$env:TEMP\scala-2.12.1.msi"
+	$TemptFiles += "$env:TEMP\scala-2.12.1.msi"
 	Write-Host 'Installing Scala 2.12.1...'
 	Start-Process msiexec.exe -Wait -ArgumentList "/I `"$env:TEMP\scala-2.12.1.msi`" /quiet"
 
