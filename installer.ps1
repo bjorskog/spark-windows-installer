@@ -74,7 +74,7 @@ if (-Not (Get-Command scala -ErrorAction SilentlyContinue)) {
 
 	if ($answer -eq 'y') {
 		$InstallScala = $true
-	}	
+	}
 } elseif ([bool]((scala -version) -notmatch '2.12')) {
 	Write-Host "We want to install Scala version 2.12.1 but you seem to have another version" -ForegroundColor Yellow
 	$answer = $null;
@@ -134,7 +134,7 @@ if (-Not [bool]$env:SCALA_HOME) {
 $hasEnvPath = ([System.Environment]::GetEnvironmentVariable('PATH', 'User') -split ';') -contains "$($Where)spark\bin"
 
 if (-not $hasEnvPath) {
-	[System.Environment]::SetEnvironmentVariable('PATH', "$([System.Environment]::GetEnvironmentVariable('PATH', 'User'))$($Where)spark\bin", 'User')	
+	[System.Environment]::SetEnvironmentVariable('PATH', "$([System.Environment]::GetEnvironmentVariable('PATH', 'User'));$($Where)spark\bin", 'User')
 }
 
 Write-Host "Creating hive scratch dirs and setting permissions..."
