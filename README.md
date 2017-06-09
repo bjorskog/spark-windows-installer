@@ -11,7 +11,7 @@ This was made for development purposes, so I don't recommend using it for produc
 
 ## What does it do ?
 
-It will install the following (if the command has not been found, don't worry, it will ask before continueing): 
+It will install the following (if the command has not been found, don't worry, it will ask before continueing):
 * **chocolatey**: A package manager for windows, used to install dependencies
 * **python2**: Installed through chocolatey
 * **Java 1.8.0 (jdk8, jre8)**: Installed through chocolatey
@@ -36,6 +36,7 @@ At the moment there is one command argument for this script:
 
 ## Current problems
 * Even though I'm using chmod to change the dir permissions spark may still fail to boot up complaining with the error `The root scratch dir: /tmp/hive on HDFS should be writable. Current permissions are: rw-rw-rw-`. Your Spark installation will not work until this is solved
+* Scala not detected even after we install it & refreshenv (although it is installed); Opening another session and re-executing the script might fix the path var
 
 ## Reporting errors & contributing
 * If you happen to run into any issue at all, don't hesitate to file a issue, here on Github 😁
